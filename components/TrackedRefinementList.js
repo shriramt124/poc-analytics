@@ -12,14 +12,19 @@ export function TrackedRefinementList(props) {
 
   const handleRefine = (value) => {
     const item = items.find(item => item.value === value);
-    const action = item?.isRefined ? 'remove_filter' : 'add_filter';
+    const isRemoving = item?.isRefined;
     
+    // Track the filter action
     gtag.trackFilter(props.attribute, value);
-    gtag.event({
-      action: action,
-      category: 'ecommerce_filter',
-      label: `${props.attribute}: ${value}`,
-    });
+    
+    // Track specific add/remove action
+    if (typeof window !== 'undefined' && window.gtag) {
+      window.gtag('event', isRemoving ? 'filter_removed' : 'filter_added', {
+        filter_type: props.attribute,
+        filter_value: value,
+        event_category: 'ecommerce',
+      });
+    }
     
     refine(value);
   };
