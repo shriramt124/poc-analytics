@@ -39,49 +39,32 @@ function MyApp({ Component, pageProps }) {
 
   return (
     <>
-      {/* Global Site Tag (gtag.js) - Google Analytics */}
+      {/* We're now using _document.js for the main GA script loading */}
+      {/* This script is just for route change tracking and debugging */}
       {gtag.GA_TRACKING_ID && (
-        <>
-          <Script
-            strategy="afterInteractive"
-            src={`https://www.googletagmanager.com/gtag/js?id=${gtag.GA_TRACKING_ID}`}
-            onLoad={() => console.log('GA script loaded')}
-          />
-          <Script
-            id="gtag-init"
-            strategy="afterInteractive"
-            onLoad={() => {
-              console.log('GA initialized');
-              console.log('GA configured with ID:', gtag.GA_TRACKING_ID);
+        <Script
+          id="gtag-route-tracker"
+          strategy="afterInteractive"
+          onLoad={() => {
+            console.log('GA route tracker initialized');
+            console.log('Using tracking ID:', gtag.GA_TRACKING_ID);
 
-              // Verify gtag function is available
-              if (typeof window !== 'undefined' && window.gtag) {
-                console.log('gtag function is available after script load');
-              } else {
-                console.error('gtag function is NOT available after script load');
+            // Verify gtag function is available
+            if (typeof window !== 'undefined' && window.gtag) {
+              console.log('gtag function is available');
+              
+              // Send an initial pageview to ensure tracking is working
+              try {
+                gtag.pageview(window.location.pathname);
+                console.log('Initial pageview sent for:', window.location.pathname);
+              } catch (error) {
+                console.error('Error sending initial pageview:', error);
               }
-            }}
-            dangerouslySetInnerHTML={{
-              __html: `
-                console.log('GA init script running');
-                window.dataLayer = window.dataLayer || [];
-                function gtag(){dataLayer.push(arguments);}
-                gtag('js', new Date());
-                
-                // Make sure we're using the correct tracking ID
-                const trackingId = '${gtag.GA_TRACKING_ID}';
-                console.log('Configuring GA with tracking ID:', trackingId);
-                
-                gtag('config', trackingId, {
-                  page_location: window.location.href,
-                  page_title: document.title,
-                  send_page_view: true,
-                  debug_mode: ${process.env.NODE_ENV !== 'production'}
-                });
-              `,
-            }}
-          />
-        </>
+            } else {
+              console.error('gtag function is NOT available');
+            }
+          }}
+        />
       )}
       <Component {...pageProps} />
     </>
