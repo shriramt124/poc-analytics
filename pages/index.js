@@ -20,6 +20,8 @@ import { TrackedRefinementList } from '../components/TrackedRefinementList';
 import { EcommerceTracker } from '../components/EcommerceTracker';
 import { GATest } from '../components/GATest';
 import { GADebugger } from '../components/GADebugger';
+import { GAEventTester } from '../components/GAEventTester';
+import { GADirectTest } from '../components/GADirectTest';
 import ErrorBoundary from '../components/ErrorBoundary';
 import { assembleTypesenseServerConfig } from '../lib/utils';
 import { renderToString } from 'react-dom/server';
@@ -52,6 +54,7 @@ const transformItems = (items) => {
 export default function Home({ serverState, serverUrl }) {
   return (
     <div>
+      <GADirectTest />
       <Head>
         <title>Ecommerce Store with Typesense + Next.js + Vercel</title>
         <link rel='icon' href='/favicon.png' />
@@ -77,6 +80,7 @@ export default function Home({ serverState, serverUrl }) {
             <EcommerceTracker />
             <GATest />
             <GADebugger />
+            <GAEventTester />
             <div className='container-fluid px-md-5 pt-4'>
               <div className='row d-flex align-items-center'>
                 <div className='col-md'>
