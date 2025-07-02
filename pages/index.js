@@ -18,6 +18,7 @@ import { TrackedSearchBox } from '../components/TrackedSearchBox';
 import { TrackedStats } from '../components/TrackedStats';
 import { TrackedRefinementList } from '../components/TrackedRefinementList';
 import { EcommerceTracker } from '../components/EcommerceTracker';
+import { GATest } from '../components/GATest';
 import ErrorBoundary from '../components/ErrorBoundary';
 import { assembleTypesenseServerConfig } from '../lib/utils';
 import { renderToString } from 'react-dom/server';
@@ -73,6 +74,7 @@ export default function Home({ serverState, serverUrl }) {
             future={{ preserveSharedStateOnUnmount: true }}
           >
             <EcommerceTracker />
+            <GATest />
             <div className='container-fluid px-md-5 pt-4'>
               <div className='row d-flex align-items-center'>
                 <div className='col-md'>

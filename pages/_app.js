@@ -19,28 +19,41 @@ function MyApp({ Component, pageProps }) {
     }
   }, [router.events])
 
+  // Debug GA loading
+  useEffect(() => {
+    console.log('GA_TRACKING_ID in _app.js:', gtag.GA_TRACKING_ID);
+  }, []);
+
   return (
     <>
       {/* Global Site Tag (gtag.js) - Google Analytics */}
-      <Script
-        strategy="afterInteractive"
-        src={`https://www.googletagmanager.com/gtag/js?id=${gtag.GA_TRACKING_ID}`}
-      />
-      <Script
-        id="gtag-init"
-        strategy="afterInteractive"
-        dangerouslySetInnerHTML={{
-          __html: `
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', '${gtag.GA_TRACKING_ID}', {
-              page_location: window.location.href,
-              page_title: document.title,
-            });
-          `,
-        }}
-      />
+      {gtag.GA_TRACKING_ID && (
+        <>
+          <Script
+            strategy="afterInteractive"
+            src={`https://www.googletagmanager.com/gtag/js?id=${gtag.GA_TRACKING_ID}`}
+            onLoad={() => console.log('GA script loaded')}
+          />
+          <Script
+            id="gtag-init"
+            strategy="afterInteractive"
+            onLoad={() => console.log('GA initialized')}
+            dangerouslySetInnerHTML={{
+              __html: `
+                console.log('GA init script running');
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', '${gtag.GA_TRACKING_ID}', {
+                  page_location: window.location.href,
+                  page_title: document.title,
+                });
+                console.log('GA configured with ID: ${gtag.GA_TRACKING_ID}');
+              `,
+            }}
+          />
+        </>
+      )}
       <Component {...pageProps} />
     </>
   )

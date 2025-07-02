@@ -3,8 +3,9 @@ import * as gtag from '../../lib/gtag';
 
 const Hit = ({ hit }) => {
   const handleProductClick = () => {
+    console.log('Product clicked:', hit); // Debug log
     gtag.trackProductView(
-      hit.objectID,
+      hit.id || hit.name, // Use id or name as fallback
       hit.name,
       hit.categories?.[0] || 'Unknown',
       hit.price
