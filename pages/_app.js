@@ -37,7 +37,10 @@ function MyApp({ Component, pageProps }) {
           <Script
             id="gtag-init"
             strategy="afterInteractive"
-            onLoad={() => console.log('GA initialized')}
+            onLoad={() => {
+              console.log('GA initialized');
+              console.log('GA configured with ID:', gtag.GA_TRACKING_ID);
+            }}
             dangerouslySetInnerHTML={{
               __html: `
                 console.log('GA init script running');
@@ -47,8 +50,8 @@ function MyApp({ Component, pageProps }) {
                 gtag('config', '${gtag.GA_TRACKING_ID}', {
                   page_location: window.location.href,
                   page_title: document.title,
+                  send_page_view: true
                 });
-                console.log('GA configured with ID: ${gtag.GA_TRACKING_ID}');
               `,
             }}
           />
